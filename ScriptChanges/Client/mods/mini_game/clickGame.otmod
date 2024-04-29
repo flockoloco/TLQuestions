@@ -1,0 +1,9 @@
+Module
+  name: mini_game
+  description: click
+  author: Me
+  website: -
+  sandboxed: true
+  scripts: [ clickGame ]
+  @onLoad: init()
+  @onUnload: terminate()

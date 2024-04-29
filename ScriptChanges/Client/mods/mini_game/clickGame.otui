@@ -1,0 +1,22 @@
+MainWindow
+  !text: tr('Clicker')
+  size: 500 375
+
+  @onEnter: modules.mini_game.hide()
+  @onEscape: modules.mini_game.hide()
+  
+  Button
+    id: clickMe
+    !text: tr('Click ME')
+    width: 64
+    margin-bottom: -6
+    @onClick: modules.mini_game.click()
+
+  Button
+    id: CancelButton
+    !text: tr('Close')
+    width: 64
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-bottom: -6
+    @onClick: modules.mini_game.hide()
