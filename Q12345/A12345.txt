@@ -9,7 +9,7 @@ end
 
 --
 function onLogout(player)
-    if player:getStorageValue(1000) == 1 then
+    if player and player:getStorageValue(1000) == 1 then
         --We can avoid the addEvent Method as the releaseStorage is a simple function and a timer doesnt seem to be needed
         --either call player:setStorageValue(1000, -1) or releaseStorage(player) right after 
         releaseStorage(player)
@@ -23,7 +23,7 @@ Q2 - Fix or improve the implementation of the below method
 function printSmallGuildNames(memberCount)
     -- this method is supposed to print names of all guilds that have less than memberCount max members
 
-    --Assuming db is all configured
+    --Assuming db is well configured
     --We can keep selectGuildQuery short by calling storeQuery and memberCount in the same line
     local selectGuildQuery = db.storeQuery("SELECT name FROM guilds WHERE max_members < '"..memberCount.."';")
     --Quick check for anything
@@ -45,11 +45,15 @@ Q3 - Fix or improve the name and the implementation of the below method
 function removeMemberFromParty(playerId, memberName)
     --It is safe to remove player variable as it is not used for this function.
     local party = Player(playerId):getParty()
-
-    for k,v in pairs(party:getMembers()) do
-        if v == Player(memberName) then
-            party:removeMember(v)
+    if party then 
+        for index, partyMember in pairs(party:getMembers()) do
+            if partyMember:getName() == memberName then
+                party:removeMember(partyMember)
+            end
         end
+    end
+    else
+        print("Error: no party found")
     end
 end
 
@@ -58,7 +62,7 @@ Q4 - Assume all method calls work fine. Fix the memory leak issue in below metho
 void Game::addItemToPlayer(const std::string& recipient, uint16_t itemId)
 {
     --to avoid using delete we use smart pointers. std::unique_ptr<T>
-    std::unique_ptr<Player> player(new g_game.getPlayerByName(recipient));
+    std::unique_ptr<Player> player(g_game.getPlayerByName(recipient));
     
     if (!player) {
         player.reset(new Player(nullptr));
